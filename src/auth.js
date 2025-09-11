@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { 
   getAuth, createUserWithEmailAndPassword, sendEmailVerification, 
-  signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged 
+  signInWithEmailAndPassword, signOut, onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 import { 
   getFirestore, doc, setDoc, getDoc, updateDoc 
@@ -38,7 +38,7 @@ export async function createUserDocIfMissing(user, extra={}) {
 // Login with verification and plan-based redirect
 export 
 // Login - if user has not verified email, deny access to protected areas (but allow login to prompt verification)
-export async function loginUser(email, password){
+async function loginUser(email, password){
   try{
     const cred = await signInWithEmailAndPassword(auth, email, password);
     const user = cred.user;
@@ -65,13 +65,6 @@ export async function loginUser(email, password){
 export async function logoutUser() {
   await signOut(auth);
   window.location.href = "/login.html";
-}
-
-
-export async function sendPasswordReset(email) {
-  if (!email) throw new Error("Email is required");
-  await sendPasswordResetEmail(auth, email);
-  return { message: "Password reset email sent" };
 }
 
 // Guard page by plan or admin
