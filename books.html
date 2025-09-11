@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-adsense-account" content="ca-pub-9825129889709024">
+    <title>Your Digital Book Store</title>
+    <link rel="icon" href="favicon.ico">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        nav {
+            background-color: blue;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        nav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: mediumorchid;
+        }
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .book {
+            border: 1px solid blue;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .button {
+    display: inline-block;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.button.primary {
+    background-color: orange;
+    color: white;
+}
+
+.button.secondary {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.button:hover {
+    opacity: 0.8;
+}
+
+        .book img {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="software.html">Software</a>
+        <a href="drivers.html">PC Drivers</a>
+        <a href="swahili.html">Masomo ya Swahili</a>
+        <a href="english.html">English courses</a>
+        <a href="ikinyarwanda.html">Amasomo y'ikinyarwanda</a>
+        <a href="contact.html">Contact</a>
+    </nav> 
+    <div class="container">
+        <h1>Welcome to Our Digital Book Store!</h1>
+        <p>Click pay and complete the automatic payment and you will receive the PDF book immediately for download or contact us on whatsapp if you are unable to pay</p>
+
+        <div class="book-grid">
+            <div class="book">
+                <img src=".\images\doctor phones.png" alt="Book 1">
+                <h3>Become Doctor phones now</h3>
+                <p>This book contains enough knowledge to turn you into an expert in repairing any phone.</p>
+                <a href="#" class="button primary">Pay 20$</a>
+
+            </div>
+            <div class="book">
+                <img src=".\images\action partner yt.png" alt="Book 2">
+                <h3>Youtube patner</h3>
+                <p>Contact us to get this book</p>
+                <a href="#" class="button primary">Pay 15$</a>
+            </div>
+            <div class="book">
+                <img src="book3.jpg" alt="Book 3">
+                <h3>Book 3 </h3>
+                <p>Coming soon.</p>
+            </div>
+            <div class="book">
+                <img src="book4.jpg" alt="Book 4">
+                <h3>Book 4 </h3>
+                <p>Coming soon.</p>
+            </div>
+            <div class="book">
+                <img src="book5.jpg" alt="Book 5">
+                <h3>Book 5 </h3>
+                <p>Coming soon.</p>
+            </div>
+            <div class="book">
+                <img src="book6.jpg" alt="Book 6">
+                <h3>Book 6 </h3>
+                <p>Coming soon..</p>
+            </div>
+            <div class="book">
+                <img src="book7.jpg" alt="Book 7">
+                <h3>Book 7 </h3>
+                <p>Coming soon..</p>
+            </div>
+            <div class="book">
+                <img src="book8.jpg" alt="Book 8">
+                <h3>Book 8 </h3>
+                <p>Coming soon.</p>
+            </div>
+            <div class="book">
+                <img src="book9.jpg" alt="Book 9">
+                <h3>Book 9</h3>
+                <p>Coming soon.</p>
+            </div>
+            <div class="book">
+                <img src="book10.jpg" alt="Book 10">
+                <h3>Book 10 </h3>
+                <p>Coming soon..</p>
+            </div>
+        </div>
+</body>
+</html>

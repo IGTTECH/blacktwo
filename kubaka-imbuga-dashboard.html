@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kubaka Imbuga (Build Websites)</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <script type="module">
+    import { guardPage } from "./src/auth.js";
+    // ensure required plan matches
+    await guardPage("kubaka-imbuga" || null);
+  </script>
+
+  <section class="dashboard-section">
+    <div class="dashboard-content">
+      <div class="text-side">
+        <h2>Kubaka Imbuga (Build Websites)</h2>
+        <details>
+          <summary>Wigezwe uburyo bwo kubaka imbuga...</summary>
+          <p>Kubaka imbuga ni amasomo yerekana uburyo bwo gukora urubuga rwiza kandi rukoreshwa mu Rwanda.
+Uzasobanukirwa HTML, CSS, na uburyo bwo gukora imbuga zishobora kugera ku bantu benshi.
+Iyi nyigisho izagufasha mu bucuruzi no guhanga udushya mu ikoranabuhanga.</p>
+        </details>
+      </div>
+      <div class="image-side">
+        <img src="assets/images/placeholder.png" alt="Course image">
+      </div>
+    </div>
+  </section>
+</body>
+</html>

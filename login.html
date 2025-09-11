@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&vault=false"></script>
+<script type="module">import { loginUser } from "./src/auth.js"; window.doLogin = async function(){ const email = document.getElementById("email").value; const password = document.getElementById("password").value; await loginUser(email,password,"loginMsg"); };</script>
+
+<title>Login - IGT Tech</title>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-6">
+  <div class="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
+    <h2 class="text-2xl font-bold mb-4">Welcome back</h2>
+    <div class="space-y-3">
+      <input id="l-email" placeholder="Email" class="p-3 border rounded w-full" />
+      <input id="l-password" type="password" placeholder="Password" class="p-3 border rounded w-full" />
+      <div id="loginMsg" class="text-sm text-red-600"></div>
+      <button onclick="doLogin()" class="w-full bg-green-600 text-white p-3 rounded">Login</button>
+      <div class="flex justify-between text-sm mt-3">
+        <a href="forgot.html" class="text-blue-600">Forgot password?</a>
+        <a href="register.html" class="text-blue-600">Create account</a>
+      </div>
+    </div>
+  </div>
+  <script type="module">
+    import {{ loginUser }} from "./src/auth.js";
+    window.doLogin = async function() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      await loginUser(email, password, 'loginMsg');
+    }
+  </script>
+
+  <script type="module">
+    import { loginUser } from "./src/auth.js";
+    document.getElementById('loginForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const email = document.getElementById('l-email').value.trim();
+      const password = document.getElementById('l-password').value;
+      const msg = document.getElementById('loginMsg');
+      msg.innerText = "Signing in...";
+      const res = await loginUser(email, password);
+      if(!res.success){
+        msg.style.color='red';
+        msg.innerText = res.error || res.message || "Login failed";
+        return;
+      }
+      // res.success true
+      if(res.isAdmin){
+        // go to admin page or let admin choose
+        window.location.href = "src/admin-add-paid.html";
+        return;
+      }
+      if(res.paid){
+        // redirect to user's plan dashboard
+        const plan = res.plan || "";
+        // map plan slugs to dashboard filenames
+        const map = {
+          "website-development":"website-dev-dashboard.html",
+          "mobile-repairing":"mobile-rep-dashoard.html",
+          "kujenga-tovuti":"kujenga-tovuti-dashboard.html",
+          "ufundi-simu":"ufundi-simu-dashboard.html",
+          "kubaka-imbuga":"kubaka-imbuga-dashboard.html"
+        };
+        const dest = map[plan] || "index.html";
+        window.location.href = dest;
+        return;
+      }else{
+        // not paid - send to payment page
+        alert("Your account is not marked as paid. You will be redirected to payment page.");
+        window.location.href = "payment.html";
+        return;
+      }
+    });
+  </script>
+</body>
+</html>

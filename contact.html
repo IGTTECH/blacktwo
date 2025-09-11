@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-adsense-account" content="ca-pub-9825129889709024">
+    <title>Contact Us</title>
+    <link rel="icon" href="favicon.ico">
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: red;
+        }
+
+        nav li {
+            display: inline;
+        }
+
+        nav a {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
+        }
+
+        nav a:hover {
+            background-color: blue;
+        }
+
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Clear floats */
+        }
+
+        .form-container {
+            width: 50%;
+            float: left;
+            padding-right: 20px;
+            box-sizing: border-box;
+        }
+
+        .image-container {
+            width: 50%;
+            float: left;
+            display: flex; /* Use flexbox for image alignment */
+            justify-content: space-around; /* Distribute images evenly */
+            align-items: center; /* Center images vertically */
+        }
+
+        .image-container img {
+            max-width: 45%; /* Adjust as needed */
+            height: auto;
+            border-radius: 8px;
+            cursor: pointer; /* Indicate clickable images */
+            transition: transform 0.3s ease;
+        }
+
+        .image-container img:hover {
+            transform: scale(1.05); /* Slight zoom on hover */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+         <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="software.html">Software</a></li>
+        <li><a href="drivers.html">PC Drivers</a></li>
+        <li><a href="swahili.html">Masomo ya Swahili</a></li>
+        <li><a href="english.html">English courses</a></li>
+        <li><a href="ikinyarwanda.html">Amasomo y'ikinyarwanda</a></li>
+        </ul>
+    <div class="container">
+        <div class="form-container">
+            <h2>Contact Us</h2>
+            <form action="mailto:info.igttech@gmail.com" method="post" enctype="text/plain">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+
+        <div class="image-container">
+            <a href="https://wa.me/message/6O35VDCIY43TE1" target="_blank"><img src=".\images\whatsapp logo.jfif"></a>
+            <a href="#" target="_blank"><img src=".\images\fb logo.jfif"></a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Contact Us. All rights reserved.</p>
+    </footer>
+    <script>
+        // Replace with actual image paths.
+        document.querySelectorAll('.image-container img').forEach(img => {
+            img.onerror = () => {
+                img.src = 'placeholder.png'; // Or some default image.
+            };
+        });
+
+    </script>
+</body>
+</html>

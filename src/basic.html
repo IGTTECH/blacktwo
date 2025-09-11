@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>Basic Dashboard</title></head>
+<body>
+  <h2>Basic Dashboard</h2>
+  <p>Welcome to the basic dashboard.</p>
+  <button id="logout">Logout</button>
+  <script type="module">
+    import { guardPage, logoutUser } from "./auth.js";
+    guardPage("basic");
+    document.getElementById("logout").onclick = logoutUser;
+  </script>
+</body>
+</html>

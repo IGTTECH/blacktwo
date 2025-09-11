@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kujenga Tovuti (Building Websites)</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <script type="module">
+    import { guardPage } from "./src/auth.js";
+    // ensure required plan matches
+    await guardPage("kujenga-tovuti" || null);
+  </script>
+
+  <section class="dashboard-section">
+    <div class="dashboard-content">
+      <div class="text-side">
+        <h2>Kujenga Tovuti (Building Websites)</h2>
+        <details>
+          <summary>Jifunze kujenga tovuti bora...</summary>
+          <p>Kujenga tovuti kunahusisha kubuni na kutengeneza tovuti kwa biashara na jamii.
+Utajifunza HTML, CSS, JavaScript, pamoja na mbinu za kutumia lugha ya Kiswahili katika maudhui.
+Kozi hii inalenga kukuza ujuzi wako wa kiteknolojia kwa kutumia mifumo ya ndani na ya kimataifa.</p>
+        </details>
+      </div>
+      <div class="image-side">
+        <img src="assets/images/placeholder.png" alt="Course image">
+      </div>
+    </div>
+  </section>
+</body>
+</html>

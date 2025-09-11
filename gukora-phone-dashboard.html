@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gukora Phone (Repair Phones)</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <script type="module">
+    import { guardPage } from "./src/auth.js";
+    // ensure required plan matches
+    await guardPage("None" || null);
+  </script>
+
+  <section class="dashboard-section">
+    <div class="dashboard-content">
+      <div class="text-side">
+        <h2>Gukora Phone (Repair Phones)</h2>
+        <details>
+          <summary>Menya uburyo bwo gusana telefone...</summary>
+          <p>Gukora telefone ni amasomo yibanda ku gusana no kubungabunga telefone ngendanwa.
+Uzasobanukirwa uburyo bwo gusimbuza ibice bya telefone, gusana batiri, no gukemura ibibazo bya software.
+Iyi nyigisho izagufasha kugira ubumenyi bwo kuba umutekinisiye w'imizindaro.</p>
+        </details>
+      </div>
+      <div class="image-side">
+        <img src="assets/images/placeholder.png" alt="Course image">
+      </div>
+    </div>
+  </section>
+</body>
+</html>

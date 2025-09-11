@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ufundi Simu (Phone Repairing)</title>
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <script type="module">
+    import { guardPage } from "./src/auth.js";
+    // ensure required plan matches
+    await guardPage("ufundi-simu" || null);
+  </script>
+
+  <section class="dashboard-section">
+    <div class="dashboard-content">
+      <div class="text-side">
+        <h2>Ufundi Simu (Phone Repairing)</h2>
+        <details>
+          <summary>Jifunze kutengeneza simu zako...</summary>
+          <p>Ufundi simu unahusisha matengenezo ya vifaa vya simu za mkononi.
+Utajifunza jinsi ya kuchunguza matatizo, kubadilisha skrini, na kurekebisha matatizo ya programu.
+Kozi hii inalenga wanafunzi wa Kiswahili wanaotaka taaluma ya ufundi simu.</p>
+        </details>
+      </div>
+      <div class="image-side">
+        <img src="assets/images/placeholder.png" alt="Course image">
+      </div>
+    </div>
+  </section>
+</body>
+</html>
