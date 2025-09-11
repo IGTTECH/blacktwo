@@ -1,0 +1,45 @@
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f7faff;
+  margin: 0;
+  padding: 0;
+}
+.dashboard-section {
+  margin: 2rem auto;
+  max-width: 1000px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.dashboard-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+.text-side h2 {
+  color: #004c6d;
+  margin-bottom: 1rem;
+}
+.text-side details summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: #0077b6;
+}
+.text-side details p {
+  margin-top: 0.5rem;
+  color: #333;
+  line-height: 1.6;
+}
+.image-side img {
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+@media (max-width: 768px) {
+  .dashboard-content {
+    grid-template-columns: 1fr;
+  }
+}
