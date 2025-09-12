@@ -9,6 +9,18 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
+// Runtime sanity check for firebaseConfig placeholders
+function _checkFirebaseConfig(cfg){
+  if(!cfg || cfg.apiKey===undefined) return false;
+  const placeholders = ["REPLACE_WITH_", "your-project-id", "REPLACE"];
+  const s = Object.values(cfg).join(" ");
+  for(const ph of placeholders){ if(s.includes(ph)) return false; }
+  return true;
+}
+if(!_checkFirebaseConfig(firebaseConfig)){
+  console.warn("Firebase config appears to contain placeholders. Replace src/firebase-config.js with your project config to enable Firebase.");
+}
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -17,7 +29,6 @@ const db = getFirestore(app);
 export async function registerUser(email, password, plan) {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
   await sendEmailVerification(cred.user);
-  // Firestore doc created later after verification
   return { message: "Verification email sent. Please verify before login.", uid: cred.user.uid };
 }
 
@@ -36,30 +47,30 @@ export async function createUserDocIfMissing(user, extra={}) {
 }
 
 // Login with verification and plan-based redirect
-export 
-// Login - if user has not verified email, deny access to protected areas (but allow login to prompt verification)
-async function loginUser(email, password){
+export async function loginUser(email, password){
   try{
+    if(!_checkFirebaseConfig(firebaseConfig)) throw new Error("Firebase config missing or placeholder");
+
     const cred = await signInWithEmailAndPassword(auth, email, password);
     const user = cred.user;
+
     if(!user.emailVerified){
-      // sign user out to prevent access until verified
       await signOut(auth);
       return { success:false, message:"Email not verified. Please verify your email before logging in.", code:"EMAIL_NOT_VERIFIED" };
     }
-    // ensure user doc exists (without changing paid flag)
+
     await createUserDocIfMissing(user);
-    // fetch user doc and admin status
+
     const udoc = await getDoc(doc(db,"users",user.uid));
     const data = udoc.exists()? udoc.data(): null;
     const adminDoc = await getDoc(doc(db,"admins",user.uid));
     const isAdmin = adminDoc.exists();
+
     return { success:true, user, isAdmin, paid: !!(data && data.paid), plan: data? data.plan:null };
   }catch(err){
     return { success:false, error: err.message || String(err) };
   }
 }
-
 
 // Logout
 export async function logoutUser() {
