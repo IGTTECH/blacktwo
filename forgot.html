@@ -5,8 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <link rel="stylesheet" href="assets/styles.css">
+
+<!-- PayPal SDK (not really needed on this page, but left here if required) -->
 <script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&vault=false"></script>
-<script type="module">import { resetPassword } from "./src/auth.js"; window.doReset = async function(){ const email = document.getElementById("email").value; await resetPassword(email,"msg"); };</script>
+
+<script>
+  function showError(msg){
+    document.getElementById('error-message').innerText = msg;
+  }
+</script>
 
 <title>Forgot Password - IGT Tech</title>
 </head>
@@ -14,23 +21,43 @@
   <div class="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
     <h2 class="text-2xl font-bold mb-4">Reset your password</h2>
     <p class="text-sm mb-4">Enter your email and we'll send a password reset link.</p>
-    <input id="email" placeholder="Email" class="p-3 border rounded w-full" />
-    <div id="msg" class="text-sm text-red-600 mt-2"></div>
-    <button onclick="doReset()" class="w-full bg-yellow-600 text-white p-3 rounded mt-3">Send reset email</button>
+    <form id="resetForm" class="space-y-3">
+      <input id="email" type="email" placeholder="Email" required class="p-3 border rounded w-full" />
+      <div id="msg" class="text-sm text-red-600 mt-2"></div>
+      <button type="submit" class="w-full bg-yellow-600 text-white p-3 rounded mt-3">Send reset email</button>
+    </form>
   </div>
+
   <script type="module">
-    import {{ sendPasswordResetEmail }} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-    const auth = window._auth;
-    window.doReset = async function() {
+    import { getAuth, sendPasswordResetEmail } 
+      from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import { initializeApp } 
+      from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { firebaseConfig } from "./src/firebase-config.js";
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.getElementById('resetForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
       const msg = document.getElementById('msg');
-      const email = document.getElementById('email').value;
+      msg.style.color = 'black';
+      msg.innerText = "Sending reset email...";
+
       try {
         await sendPasswordResetEmail(auth, email);
+        msg.style.color = 'green';
         msg.innerText = "Password reset email sent. Check your inbox.";
       } catch (err) {
+        msg.style.color = 'red';
         msg.innerText = "Error: " + err.message;
+        showError(err.message);
       }
-    }
+    });
   </script>
+
+  <div id="error-message" style="color:red;margin-top:10px;"></div>
 </body>
 </html>
