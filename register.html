@@ -5,26 +5,37 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <link rel="stylesheet" href="igt.css">
-<script src="https://www.paypal.com/sdk/js?client-id=AQKhStHv4Uf8SdGlU2uGuqriwVLu0BQflzv9NVjWbu9AaADuxcHpClTM6TNNlfD44SFohBltpwyLcttb&currency=USD"></script>
 
+<!-- PayPal SDK (replace client-id with yours) -->
+<script src="https://www.paypal.com/sdk/js?client-id=YOUR_PAYPAL_CLIENT_ID&currency=USD"></script>
+
+<script>
+function showError(msg){
+  document.getElementById('error-message').innerText = msg;
+}
+</script>
 
 <title>Register - IGT Tech</title>
 </head>
 <body class="bg-gray-50 min-h-screen flex items-center justify-center p-6">
   <div class="max-w-3xl w-full bg-white rounded-2xl shadow-lg p-8 grid grid-cols-2 gap-6">
+    <!-- Registration Form -->
     <div class="col-span-1">
       <h2 class="text-2xl font-bold mb-4">Create an account</h2>
-      <form id="registerForm" class="space-y-3" onsubmit="event.preventDefault(); registerUser('registerForm','msg','paypal-container')">
+      <form id="registerForm" class="space-y-3">
         <div class="grid grid-cols-2 gap-3">
           <input name="firstName" placeholder="First name" required class="p-3 border rounded" />
           <input name="lastName" placeholder="Last name" required class="p-3 border rounded" />
         </div>
         <input name="whatsapp" placeholder="Whatsapp (with country code) e.g. +2567..." required class="p-3 border rounded w-full" />
-        <input name="email" type="email" placeholder="Email" required class="p-3 border rounded w-full" />
+
+        <!-- Added IDs for JS access -->
+        <input id="r-email" name="email" type="email" placeholder="Email" required class="p-3 border rounded w-full" />
         <div class="grid grid-cols-2 gap-3">
-          <input name="password" type="password" placeholder="Password" required class="p-3 border rounded" />
+          <input id="r-password" name="password" type="password" placeholder="Password" required class="p-3 border rounded" />
           <input name="language" placeholder="Language (e.g. English, Kiswahili)" class="p-3 border rounded" />
         </div>
+
         <label class="block">Choose course you want to learn</label>
         <select name="course" required class="p-3 border rounded w-full">
           <option value="website-development">Website Development - $20/mo</option>
@@ -34,37 +45,59 @@
           <option value="kubaka-imbuga">Kubaka Imbuga - $25/mo</option>
           <option value="gukora-phone">Gukora Phone - $12/mo</option>
         </select>
-        <div class="mt-2"><label>Choose plan</label><select id="r-plan" class="w-full p-2 border rounded"><option value="website-development">Website Development</option><option value="mobile-repairing">Mobile Repairing</option><option value="kujenga-tovuti">Kujenga Tovuti</option><option value="ufundi-simu">Ufundi Simu</option><option value="kubaka-imbuga">Kubaka Imbuga</option></select></div>
+
+        <div class="mt-2">
+          <label>Choose plan</label>
+          <select id="r-plan" class="w-full p-2 border rounded">
+            <option value="website-development">Website Development</option>
+            <option value="mobile-repairing">Mobile Repairing</option>
+            <option value="kujenga-tovuti">Kujenga Tovuti</option>
+            <option value="ufundi-simu">Ufundi Simu</option>
+            <option value="kubaka-imbuga">Kubaka Imbuga</option>
+          </select>
+        </div>
+
         <div id="msg" class="text-sm text-red-600"></div>
         <button class="w-full bg-blue-600 text-white p-3 rounded">Create account & Pay</button>
       </form>
     </div>
+
+    <!-- Payment Section -->
     <div class="col-span-1 p-4 bg-blue-50 rounded">
       <h3 class="text-lg font-semibold mb-2">Payment</h3>
       <p class="text-sm mb-3">After creating an account a verification email will be sent. Once verified, complete payment below to unlock the course dashboard.</p>
-       <p class="text-xs text-gray-500 mt-4">PayPal client-id must be inserted into the script tag in each page (replace YOUR_PAYPAL_CLIENT_ID).</p>
-      <script>
+      <p class="text-xs text-gray-500 mt-4">PayPal client-id must be inserted into the script tag in each page (replace YOUR_PAYPAL_CLIENT_ID).</p>
+      <div id="paypal-container"></div>
     </div>
   </div>
-  
+
+  <!-- Firebase Auth Logic -->
   <script type="module">
     import { registerUser } from "./src/auth.js";
+
     document.getElementById('registerForm').addEventListener('submit', async (e)=>{
       e.preventDefault();
+
       const email = document.getElementById('r-email').value.trim();
       const password = document.getElementById('r-password').value;
       const plan = document.getElementById('r-plan').value;
       const msg = document.getElementById('msg');
+
+      msg.style.color = 'black';
       msg.innerText = "Creating account...";
-      const res = await registerUser(email, password, plan);
-      if(res.success){
+
+      try {
+        const res = await registerUser(email, password, plan);
         msg.style.color = 'green';
         msg.innerText = res.message || "Account created. Check your email for verification.";
-      }else{
+      } catch(e) {
+        showError(e.message);
         msg.style.color = 'red';
-        msg.innerText = res.error || res.message || "Error creating account";
+        msg.innerText = e.message || "Error creating account";
       }
     });
   </script>
+
+  <div id="error-message" style="color:red;margin-top:10px;"></div>
 </body>
 </html>
