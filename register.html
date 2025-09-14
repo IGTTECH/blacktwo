@@ -6,7 +6,7 @@
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <link rel="stylesheet" href="igt.css">
 
-<!-- PayPal SDK (replace client-id with yours) -->
+<!-- PayPal SDK -->
 <script src="https://www.paypal.com/sdk/js?client-id=AVEX1YCYhqqBh1UB3qas6vKAmRDHKk5ro8z5I65vKco3B5-NsrnbYSqkYTcwUQFyuop96hhmOkvB92-k&currency=USD"></script>
 
 <script>
@@ -58,15 +58,19 @@ function showError(msg){
         </div>
 
         <div id="msg" class="text-sm text-red-600"></div>
-        <button class="w-full bg-blue-600 text-white p-3 rounded">Create account & Pay</button>
+        <button class="w-full bg-blue-600 text-white p-3 rounded">Create account</button>
       </form>
+
+      <!-- Verify button (appears after register) -->
+      <button id="verifyBtn" class="hidden w-full mt-3 bg-green-600 text-white p-3 rounded">
+        I have verified my email
+      </button>
     </div>
 
     <!-- Payment Section -->
     <div class="col-span-1 p-4 bg-blue-50 rounded">
       <h3 class="text-lg font-semibold mb-2">Payment</h3>
-      <p class="text-sm mb-3">After creating an account a verification email will be sent. Once verified, complete payment below to unlock the course dashboard.</p>
-      <p class="text-xs text-gray-500 mt-4">PayPal client-id must be inserted into the script tag in each page (replace YOUR_PAYPAL_CLIENT_ID).</p>
+      <p class="text-sm mb-3">After creating an account a verification email will be sent. Once verified, click below to pay and unlock the dashboard.</p>
       <div id="paypal-container"></div>
     </div>
   </div>
@@ -74,40 +78,67 @@ function showError(msg){
   <!-- Firebase Auth Logic -->
   <script type="module">
     import { registerUser } from "./src/auth.js";
+    import { getAuth, reload } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    const auth = getAuth();
 
     document.getElementById('registerForm').addEventListener('submit', async (e)=>{
       e.preventDefault();
-
-      const email     = document.getElementById('r-email').value.trim();
-      const password  = document.getElementById('r-password').value;
-      const plan      = document.getElementById('r-plan').value;
-
-      // collect extra fields
-      const firstName = e.target.firstName.value.trim();
-      const lastName  = e.target.lastName.value.trim();
-      const whatsapp  = e.target.whatsapp.value.trim();
-      const language  = e.target.language.value.trim();
-      const course    = e.target.course.value;
-
+      const form = e.target;
+      const email = document.getElementById('r-email').value.trim();
+      const password = document.getElementById('r-password').value;
+      const plan = document.getElementById('r-plan').value;
       const msg = document.getElementById('msg');
+
+      const extra = {
+        firstName: form.firstName.value,
+        lastName: form.lastName.value,
+        whatsapp: form.whatsapp.value,
+        language: form.language.value,
+        course: form.course.value,
+        plan
+      };
+
       msg.style.color = 'black';
       msg.innerText = "Creating account...";
 
       try {
-        const res = await registerUser(email, password, {
-          firstName,
-          lastName,
-          whatsapp,
-          language,
-          course,
-          plan
-        });
+        const res = await registerUser(email, password, extra);
         msg.style.color = 'green';
-        msg.innerText = res.message || "Account created. Check your email for verification.";
+        msg.innerText = res.message;
+
+        // show verify button
+        document.getElementById("verifyBtn").classList.remove("hidden");
+
       } catch(e) {
         showError(e.message);
         msg.style.color = 'red';
         msg.innerText = e.message || "Error creating account";
+      }
+    });
+
+    // Handle verify email button
+    document.getElementById("verifyBtn").addEventListener("click", async ()=>{
+      const user = auth.currentUser;
+      await reload(user); // refresh status
+      if (user && user.emailVerified) {
+        document.getElementById("verifyBtn").classList.add("hidden");
+
+        // Show PayPal button
+        paypal.Buttons({
+          createOrder: (data, actions) => {
+            return actions.order.create({
+              purchase_units: [{ amount: { value: "20.00" } }]
+            });
+          },
+          onApprove: async (data, actions) => {
+            await actions.order.capture();
+            alert("Payment successful! You can now access your dashboard.");
+            window.location.href = "/dashboard.html";
+          }
+        }).render('#paypal-container');
+      } else {
+        alert("Please verify your email first, then click again.");
       }
     });
   </script>
