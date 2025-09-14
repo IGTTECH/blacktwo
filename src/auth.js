@@ -1,4 +1,4 @@
-// auth.js (updated with plan-aware guardPage)
+// auth.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { 
   getAuth, createUserWithEmailAndPassword, sendEmailVerification, 
@@ -25,28 +25,33 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Register user (only Auth, wait for verification before Firestore write)
-export async function registerUser(email, password, plan) {
+// ---------------- REGISTER -----------------
+export async function registerUser(email, password, extra={}) {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
   await sendEmailVerification(cred.user);
   return { message: "Verification email sent. Please verify before login.", uid: cred.user.uid };
 }
 
-// Create user doc after verification
+// ---------------- CREATE DOC -----------------
 export async function createUserDocIfMissing(user, extra={}) {
   const ref = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
   if (!snap.exists()) {
     await setDoc(ref, {
       email: user.email,
-      paid: false,
+      firstName: extra.firstName || "",
+      lastName: extra.lastName || "",
+      whatsapp: extra.whatsapp || "",
+      language: extra.language || "",
+      course: extra.course || "",
       plan: extra.plan || null,
+      paid: false,
       createdAt: new Date().toISOString()
     });
   }
 }
 
-// Login with verification and plan-based redirect
+// ---------------- LOGIN -----------------
 export async function loginUser(email, password){
   try{
     if(!_checkFirebaseConfig(firebaseConfig)) throw new Error("Firebase config missing or placeholder");
@@ -72,13 +77,13 @@ export async function loginUser(email, password){
   }
 }
 
-// Logout
+// ---------------- LOGOUT -----------------
 export async function logoutUser() {
   await signOut(auth);
   window.location.href = "/login.html";
 }
 
-// Guard page by plan or admin
+// ---------------- GUARD PAGE -----------------
 export async function guardPage(requiredPlan=null) {
   return new Promise((resolve, reject) => {
     onAuthStateChanged(auth, async (user) => {
@@ -113,18 +118,35 @@ export async function guardPage(requiredPlan=null) {
   });
 }
 
-// Admin grants paid access
+// ---------------- ADMIN GRANT -----------------
 export async function adminGrantPaidAccess(targetUid, plan=null) {
   const currentUser = auth.currentUser;
   if (!currentUser) throw new Error("Not signed in");
   const adminSnap = await getDoc(doc(db, "admins", currentUser.uid));
   if (!adminSnap.exists()) throw new Error("Not an admin");
+
   const ref = doc(db, "users", targetUid);
   const snap = await getDoc(ref);
   if (snap.exists()) {
-    await updateDoc(ref, { paid: true, plan: plan || snap.data().plan || null });
+    // keep existing fields, only update paid/plan
+    await updateDoc(ref, { 
+      paid: true, 
+      plan: plan || snap.data().plan || null 
+    });
   } else {
-    await setDoc(ref, { paid: true, plan: plan || null, addedByAdmin: true, createdAt: new Date().toISOString() });
+    // fallback: create minimal doc if admin adds manually
+    await setDoc(ref, { 
+      email: "", 
+      firstName: "", 
+      lastName: "", 
+      whatsapp: "", 
+      language: "", 
+      course: "", 
+      paid: true, 
+      plan: plan || null, 
+      addedByAdmin: true, 
+      createdAt: new Date().toISOString() 
+    });
   }
   return { success: true };
 }
