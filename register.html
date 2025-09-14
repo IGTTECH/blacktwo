@@ -78,16 +78,30 @@ function showError(msg){
     document.getElementById('registerForm').addEventListener('submit', async (e)=>{
       e.preventDefault();
 
-      const email = document.getElementById('r-email').value.trim();
-      const password = document.getElementById('r-password').value;
-      const plan = document.getElementById('r-plan').value;
-      const msg = document.getElementById('msg');
+      const email     = document.getElementById('r-email').value.trim();
+      const password  = document.getElementById('r-password').value;
+      const plan      = document.getElementById('r-plan').value;
 
+      // collect extra fields
+      const firstName = e.target.firstName.value.trim();
+      const lastName  = e.target.lastName.value.trim();
+      const whatsapp  = e.target.whatsapp.value.trim();
+      const language  = e.target.language.value.trim();
+      const course    = e.target.course.value;
+
+      const msg = document.getElementById('msg');
       msg.style.color = 'black';
       msg.innerText = "Creating account...";
 
       try {
-        const res = await registerUser(email, password, plan);
+        const res = await registerUser(email, password, {
+          firstName,
+          lastName,
+          whatsapp,
+          language,
+          course,
+          plan
+        });
         msg.style.color = 'green';
         msg.innerText = res.message || "Account created. Check your email for verification.";
       } catch(e) {
