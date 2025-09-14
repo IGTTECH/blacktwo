@@ -1,4 +1,3 @@
-// auth.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import { 
   getAuth, createUserWithEmailAndPassword, sendEmailVerification, 
@@ -29,6 +28,21 @@ const db = getFirestore(app);
 export async function registerUser(email, password, extra={}) {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
   await sendEmailVerification(cred.user);
+
+  // Immediately create Firestore doc with all extra fields
+  const ref = doc(db, "users", cred.user.uid);
+  await setDoc(ref, {
+    email: email,
+    firstName: extra.firstName || "",
+    lastName: extra.lastName || "",
+    whatsapp: extra.whatsapp || "",
+    language: extra.language || "",
+    course: extra.course || "",
+    plan: extra.plan || null,
+    paid: false,
+    createdAt: new Date().toISOString()
+  });
+
   return { message: "Verification email sent. Please verify before login.", uid: cred.user.uid };
 }
 
